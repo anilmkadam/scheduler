@@ -13,6 +13,13 @@
             "password": "23451",
             "securityQue": "www",
             "answer": "aaa"
+        },
+        {
+            "name": "rahul",
+            "email": "rahuljoshi@gmail.com",
+            "password": "rahul123",
+            "securityQue": "www",
+            "answer": "aaa"
         }
     ]
 }
