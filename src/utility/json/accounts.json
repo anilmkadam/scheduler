@@ -1,0 +1,18 @@
+{
+    "users": [
+        {
+            "name": "anil",
+            "email": "anilkadam@gmail.com",
+            "password": "12345",
+            "securityQue": "www",
+            "answer": "aaa"
+        },
+        {
+            "name": "rohit",
+            "email": "rohitrathi@gmail.com",
+            "password": "23451",
+            "securityQue": "www",
+            "answer": "aaa"
+        }
+    ]
+}
