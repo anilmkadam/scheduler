@@ -2,24 +2,31 @@ const express = require('express');
 const uuidv1 = require('uuid/v1');
 const router = express.Router();
 
-const {users, writeData,  conn} = require('../utility/dataAdapter');
+const {users, conn} = require('../utility/dataAdapter');
 
 router.post('/login', (req, res) => {
-    const username = req.body.email;
-    const password = req.body.password;
+    const {email, password} = req.body
 
-    if(users.find((u) => u.email === username && u.password === password)){
-        res.json({
-            success: true,
-            message: 'logged in successfully',
-            session_id: uuidv1()
-        });
-    } else {
-        res.json({
-            success: false,
-            message: 'Invalid username or password',
-        })
-    }
+    conn.query("SELECT * FROM users where email = $1 AND password = $2", [email, password], (error, results) => {
+        if(error) {
+            throw error;
+        }
+        if(results.rowCount > 0){
+            res.status(200).json({
+                success: true,
+                message: 'logged in successfully',
+                session_id: uuidv1(),
+                user: results.rows[0]
+            });
+        }
+        else {
+            res.status(500).json({
+                success: false,
+                message: 'Invalid username or password',
+            });
+        }
+
+    })
 });
 
 router.post('/signup',(req, res) => {
