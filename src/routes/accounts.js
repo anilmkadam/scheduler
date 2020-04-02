@@ -2,7 +2,7 @@ const express = require('express');
 const uuidv1 = require('uuid/v1');
 const router = express.Router();
 
-const {users, writeData } = require('../utility/dataAdapter');
+const {users, writeData,  conn} = require('../utility/dataAdapter');
 
 router.post('/login', (req, res) => {
     const username = req.body.email;
@@ -24,38 +24,25 @@ router.post('/login', (req, res) => {
 
 router.post('/signup',(req, res) => {
     
-    const name = req.body.name;
-    const email = req.body.email;
-    const password = req.body.password;
-    const securityQue = req.body.securityQue;
-    const answer = req.body.answer;
-
-    const user = {
-        'name' : name,
-        'email' : email,
-        'password' : password,
-        'securityQue' : securityQue,
-        'answer' : answer
-    }
-
-    if(users.find((u) => u.email === user.email)) {
-        res.json({
-            success: false,
-            message: "Already present"
-        });
-    } else {
-        writeData(user);
-        res.json({
-            success: true,
-            message: 'user added successfully',
-            user: users.find((u) => u.email === user.email)
-        })
-    }
+    const {name, email, password, securityQue, answer} = req.body;
+    console.log("data " + name, email, password, securityQue, answer);
+    let isAuthentic = false
+    
+    conn.query('INSERT INTO users(email, name, security_que, security_ans, password, isauthentic) VALUES($1, $2, $3, $4, $5, $6)',[email, name, securityQue, answer, password, isAuthentic], (error, results) => {
+        if(error) {
+            res.status(500).json(error)
+            throw error;
+        } 
+        res.status(200).send(`User added with ID : ${results.insertId}`);
+    });
 });
 
 router.get('/users', (req, res) => {
-    res.json({
-        users: users
-    })
-})
+    conn.query('SELECT * FROM users',(error, results) => {
+        if(error)
+            throw error
+        res.status(200).json(results.rows);
+    });
+});
+
 module.exports = router;
