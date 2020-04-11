@@ -40,7 +40,7 @@ router.post('/signup',(req, res) => {
             res.status(500).json(error)
             throw error;
         } 
-        res.status(200).send(`User added with ID : ${results.insertId}`);
+        res.status(200).send(`User added with ID : ${results}`);
     });
 });
 

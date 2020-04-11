@@ -3,7 +3,7 @@ const app = express();
 const bodyParser = require('body-parser')
 
 const accountsRoute = require('./routes/accounts');
-
+const routineRoute = require('./routes/routine');
 const {writeData, users} = require('./utility/dataAdapter');
 app.use(express.json());
 app.use(bodyParser.urlencoded({extended:true}));
@@ -17,6 +17,7 @@ app.get('/', (req, res) => {
 });
 
 app.use(accountsRoute);
+app.use(routineRoute);
 
 app.listen(3000, () => {
     console.log('Server started.');
